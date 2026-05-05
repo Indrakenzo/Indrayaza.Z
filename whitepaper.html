@@ -2,15 +2,11 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO & GOOGLE INDEXING TAGS -->
-    <title>Anatomi Forensik & Intelijen Digital | INDRAYAZA Z</title>
-    <meta name="description" content="Seni membedah jejak siber yang tak terlihat. Memahami Forensik Digital, Analisis, dan Intelijen Siber bersama Indrayaza Z.">
-    <meta name="keywords" content="Forensik Digital, Intelijen Siber, OPSEC Failure, Metadata, ExifTool, Cybersecurity, Indrayaza Z">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Anatomi Forensik & Intelijen Digital | Indrayaza Z</title>
+    <meta name="description" content="Seni membedah jejak siber yang tak terlihat. Tulisan oleh Indrayaza Z, Technical Strategist & Cyber Analyst.">
     <meta name="robots" content="index, follow">
     
-    <!-- Core Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     
@@ -26,9 +22,9 @@
         body, html {
             margin: 0; padding: 0; background: var(--bg-color); color: var(--text-color);
             font-family: 'Fira Code', monospace; line-height: 1.8; overflow-x: hidden;
+            touch-action: pan-y;
         }
 
-        /* Latar Belakang & CRT */
         #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
 
         .crt-overlay {
@@ -37,58 +33,38 @@
             z-index: 100; pointer-events: none; background-size: 100% 3px;
         }
 
-        .container {
-            max-width: 850px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 1;
-        }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
 
-        /* Navigasi */
         .nav-back {
             display: inline-block; color: var(--neon-cyan); text-decoration: none;
             font-family: 'Orbitron'; margin-bottom: 40px; border: 1px solid var(--neon-cyan);
-            padding: 10px 20px; transition: 0.3s; background: rgba(0, 255, 255, 0.05); font-size: 0.9rem;
+            padding: 8px 15px; transition: 0.3s; background: rgba(0, 255, 255, 0.05); font-size: 0.9rem;
         }
-
         .nav-back:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
 
-        /* Header Artikel */
         .article-header { border-bottom: 1px dashed var(--neon-pink); padding-bottom: 20px; margin-bottom: 40px; }
-        h1 { font-family: 'Orbitron'; color: #fff; font-size: clamp(1.8rem, 4vw, 2.5rem); text-shadow: 0 0 10px var(--neon-pink); line-height: 1.3; margin: 0 0 15px 0;}
-        .meta-data { color: var(--neon-green); font-size: 0.9rem; border-left: 3px solid var(--neon-green); padding-left: 10px; }
+        h1 { font-family: 'Orbitron'; color: #fff; font-size: clamp(1.5rem, 5vw, 2.5rem); text-shadow: 0 0 10px var(--neon-pink); line-height: 1.3; margin: 0 0 10px 0;}
+        .meta-data { color: var(--neon-green); font-size: 0.85rem; border-left: 2px solid var(--neon-green); padding-left: 10px;}
 
-        /* Konten Artikel */
-        .content h2 { font-family: 'Orbitron'; color: var(--neon-cyan); margin-top: 50px; border-bottom: 1px solid rgba(0, 255, 255, 0.2); padding-bottom: 10px; }
-        .content p { text-align: justify; margin-bottom: 20px; font-size: 1rem; }
-        .content ul { margin-bottom: 20px; padding-left: 20px; }
-        .content li { margin-bottom: 15px; text-align: justify; }
+        .content h2 { font-family: 'Orbitron'; color: var(--neon-cyan); margin-top: 40px; font-size: 1.3rem; border-bottom: 1px solid rgba(0,255,255,0.2); padding-bottom: 5px; }
+        .content p { text-align: justify; margin-bottom: 20px; font-size: 0.95rem; }
+        .content ul { padding-left: 20px; margin-bottom: 20px; font-size: 0.95rem; }
+        .content li { margin-bottom: 10px; text-align: justify; }
         .content strong { color: var(--neon-pink); font-weight: normal; }
         
-        /* Kotak Highlight (Glassmorphism) */
         .highlight-box {
             background: rgba(0, 255, 255, 0.05); border-left: 4px solid var(--neon-cyan);
-            padding: 20px; margin: 30px 0; font-style: italic; color: #fff;
-            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
+            padding: 15px 20px; margin: 30px 0; font-style: italic; color: #fff; font-size: 0.95rem;
         }
 
-       /* Mengunci iklan agar tidak meluber di layar HP */
-.ads-slot {
-    margin: 40px auto; 
-    text-align: center; 
-    min-height: 90px;
-    border: 1px dashed rgba(0, 255, 255, 0.3); 
-    background: rgba(0,0,0,0.5);
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    width: 100%; /* Memastikan lebar responsif */
-    max-width: 100%; /* Menahan banner 728px di layar kecil */
-    overflow: hidden; /* Memotong bagian iklan yang melebihi layar HP */
-}
-
-/* Mematikan fitur zoom paksa saat menekan tombol di HP */
-touch-action: pan-y;
+        .ads-slot {
+            margin: 40px auto; text-align: center; min-height: 90px;
+            border: 1px dashed rgba(0, 255, 255, 0.3); background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; max-width: 100%; overflow: hidden;
         }
 
-        footer { text-align: center; margin-top: 80px; font-size: 0.8rem; opacity: 0.5; color: var(--neon-cyan); }
+        footer { text-align: center; margin-top: 80px; font-size: 0.8rem; opacity: 0.5; border-top: 1px solid #333; padding-top: 20px; color: var(--neon-cyan); }
     </style>
 </head>
 <body>
@@ -96,132 +72,85 @@ touch-action: pan-y;
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
-        <!-- Tombol Kembali ke index.html -->
-        <a href="index.html" class="nav-back">< INITIATE_RETURN_SEQUENCE</a>
+        <a href="index.html" class="nav-back">< RETURN TO MAIN TERMINAL</a>
 
-        <!-- TOP ADS GATEWAY -->
         <div class="ads-slot">
-            <!-- PASTE SCRIPT IKLAN ADSTERRA (BANNER 728x90) DI BAWAH INI -->
-            <script src="https://pl29342901.profitablecpmratenetwork.com/12/f6/38/12f6389ed045a17798951eb2f3dae123.js"></script>
-
+            <small style="color:rgba(0,255,255,0.4); font-family: 'Orbitron';">>> SECURE_ADS_GATEWAY_01</small>
         </div>
 
         <article class="article-header">
-            <h1>Anatomi Forensik dan Intelijen Digital: Seni Membedah Jejak Siber yang Tak Terlihat</h1>
+            <h1>Anatomi Forensik dan Intelijen Digital</h1>
             <div class="meta-data">
                 > AUTHOR: Indrayaza Z<br>
                 > DESIGNATION: Technical Strategist<br>
-                > TIMESTAMP: 2026-05-05<br>
-                > CLEARANCE: PUBLIC_RELEASE
+                > CLEARANCE LEVEL: Public
             </div>
         </article>
 
         <div class="content">
-            <p>Di dunia nyata, seorang detektif mencari sidik jari atau helaian rambut untuk menemukan pelaku kejahatan[cite: 19]. Namun, di dunia siber (dunia maya/internet), setiap klik, unduhan, kompresi berkas, dan modifikasi akan meninggalkan residu biner (sisa data digital) yang jauh lebih kuat dan mutlak[cite: 19]. Selamat datang di titik temu antara Forensik Digital, Analisis, dan Intelijen Siber—sebuah disiplin ilmu di mana data tidak pernah benar-benar mati, melainkan hanya bersembunyi[cite: 19].</p>
-            
-            <p>Bagi para praktisi keamanan siber, menguasai ilmu ini bukan sekadar untuk menyeret pelaku kejahatan ke meja hijau[cite: 19]. Lebih dari itu, ini adalah seni edukatif untuk memetakan bagaimana sebuah sistem atau ancaman bernapas, beroperasi, dan pada akhirnya, mendeteksi kesalahan fatal yang disembunyikan[cite: 19].</p>
+            <p>Di dunia nyata, seorang detektif mencari sidik jari atau helaian rambut untuk menemukan pelaku kejahatan. Namun, di dunia siber, setiap klik, unduhan, kompresi berkas, dan modifikasi akan meninggalkan <strong>residu biner</strong> yang jauh lebih kuat dan mutlak.</p>
+            <p>Selamat datang di titik temu antara Forensik Digital, Analisis, dan Intelijen Siber—sebuah disiplin ilmu di mana data tidak pernah benar-benar mati, melainkan hanya bersembunyi.</p>
 
-            <h2>> Triad Investigasi: Forensik, Analisis, dan Intelijen</h2>
-            <p>Banyak yang masih menyamakan ketiga pilar ini, padahal fungsi operasionalnya sangat berbeda[cite: 19]:</p>
-            
+            <h2>> Triad Investigasi</h2>
+            <p>Banyak yang masih menyamakan ketiga pilar ini, padahal fungsi operasionalnya sangat berbeda:</p>
             <ul>
-                <li><strong>Digital Forensics (Forensik Digital / Pengamanan TKP Digital):</strong> Ini adalah tahap pengamanan Tempat Kejadian Perkara di dunia maya[cite: 19]. Fokusnya murni pada ekstraksi (pengambilan) data dari jaringan atau perangkat tanpa mencemari keasliannya[cite: 19]. Aturan emasnya mutlak: Jangan pernah menyentuh atau membuka barang bukti asli secara langsung agar isinya tidak berubah[cite: 19].</li>
-                <li><strong>Digital Analysis (Analisis Digital / Rekonstruksi Kejadian):</strong> Setelah data diekstrak dan disegel, analis akan membedah data tersebut[cite: 19]. Tujuannya adalah merangkai kepingan data menjadi kronologi yang logis—menjawab Apa, Kapan, dan Bagaimana sebuah kejadian tak wajar (anomali) terjadi[cite: 19].</li>
-                <li><strong>Cyber Intelligence (Intelijen Siber / Pencarian Motif):</strong> Di sinilah permainan analisis pikiran dimulai[cite: 19]. Intelijen tidak hanya peduli pada kerusakan yang terjadi, tetapi mencari tahu Siapa pelakunya (Threat Actor) dan Mengapa mereka melakukannya (Motive)[cite: 19]. Mereka menganalisis Tactics, Techniques, and Procedures atau TTPs (Taktik dan Pola Kerja) untuk melihat apakah ini ulah peretas pemula, orang dalam institusi (insider threat), atau kelompok terorganisir[cite: 19].</li>
+                <li><strong>Digital Forensics:</strong> Pengamanan TKP Digital. Fokus murni pada ekstraksi data tanpa mencemari keasliannya.</li>
+                <li><strong>Digital Analysis:</strong> Membedah data untuk merangkai kronologi logis (Apa, Kapan, Bagaimana).</li>
+                <li><strong>Cyber Intelligence:</strong> Mencari tahu Siapa pelakunya (Threat Actor) dan Mengapa (Motive) dengan menganalisis TTPs (Tactics, Techniques, and Procedures).</li>
             </ul>
-
-            <h2>> Prinsip Emas: Segel Kriptografi dan Rantai Pembuktian</h2>
-            <p>Dalam edukasi forensik, sebuah dokumen tidak ada harganya jika keasliannya (integritasnya) sudah tercemar[cite: 19]. Untuk memastikan Chain of Custody (Rantai Pengamanan Barang Bukti) tidak terbantahkan sejak pertama kali ditemukan, digunakanlah sistem Hashing (Segel Digital/Kriptografi)[cite: 19].</p>
-            
-            <p>Algoritma keamanan seperti SHA-256 bertindak sebagai "DNA" mutlak dari sebuah berkas[cite: 19]. Mengubah satu titik atau spasi saja di dalam sebuah dokumen akan mengubah total deretan angka dan huruf pada segel hash tersebut[cite: 19]. Inilah garis pertahanan pertama dalam memvalidasi keaslian data[cite: 19].</p>
 
             <div class="highlight-box">
-                "Dalam kacamata intelijen, tidak ada manipulasi digital yang sempurna. Kelompok peretas tingkat tinggi kelas negara (Advanced Persistent Threat / APT) sekalipun pasti pernah melakukan Operational Security (OPSEC) Failure—yaitu kegagalan dalam menjaga kerahasiaan operasi mereka sendiri."[cite: 19]
+                "Bagi seorang analis, Metadata bukanlah sekadar informasi teknis, melainkan sidik jari psikologis yang membongkar identitas sang pembuat dokumen."
             </div>
 
-            <h2>> OPSEC Failures: Tambang Emas Analis Intelijen</h2>
-            <p>Bagi seorang analis, Metadata (data tersembunyi yang mendeskripsikan sebuah berkas) bukanlah sekadar informasi teknis, melainkan "sidik jari psikologis"[cite: 19]. Misalnya, jejak penggunaan aplikasi pengubah PDF pihak ketiga secara sembarangan, atau jejak zona waktu (Timezone) lokal yang tertinggal di dalam dokumen, bisa menjadi <em>smoking gun</em> (bukti telak) yang membongkar identitas dan kebiasaan sang pembuat dokumen.</p>
-
-            <h2>> Peralatan Tempur: Membedah dengan Presisi</h2>
-            <p>Seorang analis tidak bekerja dengan asumsi atau sekadar menebak, melainkan menggunakan deretan perintah pada Command Line Interface / CLI (Antarmuka layar hitam yang dikendalikan dengan ketikan kode khusus) secara sangat presisi[cite: 19]. Berikut adalah alat-alat (tools) standar dalam operasi pembedahan data[cite: 19]:</p>
+            <h2>> Peralatan Tempur Taktikal</h2>
+            <p>Seorang analis bekerja menggunakan Command Line Interface (CLI) secara sangat presisi:</p>
             <ul>
-                <li><strong>ExifTool (Mata-mata Profiling):</strong> Bukan sekadar pembaca informasi tersembunyi[cite: 19]. Alat ringan namun mematikan ini mampu menarik ribuan baris data dari sebuah berkas[cite: 19]. Dari sini, bisa terlihat aplikasi apa yang digunakan, kapan tepatnya dokumen direkayasa, hingga sistem operasi yang dipakai kreatornya[cite: 19]. Data ini membantu menyusun garis waktu (timeline) yang akurat[cite: 19].</li>
-                <li><strong>Pdfinfo & Pdf-parser (Pisau Bedah Anatomi Dokumen):</strong> Khusus untuk dokumen bersertifikat resmi, alat ini tidak membuka berkas seperti kita membaca PDF biasa[cite: 19]. Alat ini membongkar struktur kode di balik layar, mengendus apakah ada sistem sandi (enkripsi) yang dirusak atau Tanda Tangan Elektronik sah yang dipotong paksa[cite: 19].</li>
-                <li><strong>Strings & Grep (Penyedot Residu):</strong> Saat ada pihak mencoba menghapus jejak, mereka sering kali lupa membersihkan sisa memori[cite: 19]. Kombinasi alat ini bertindak bak <em>vacuum cleaner</em> (penyedot debu), menyedot teks bahasa manusia (ASCII/Unicode) yang tertinggal di tumpukan kode mesin (file biner) untuk mencari kata kunci rahasia[cite: 19].</li>
-                <li><strong>Binwalk (Pendeteksi Anomali):</strong> Digunakan untuk melihat apakah ada berkas atau instruksi tersembunyi lain yang diselundupkan secara paksa ke dalam sebuah dokumen tunggal[cite: 19].</li>
-                <li><strong>Hashdeep (Pembuat Segel Massal):</strong> Alat otomatisasi untuk menyegel dan memverifikasi keaslian ribuan berkas sekaligus secara massal, memastikan dokumen yang diaudit hari ini sama persis dengan yang ditemukan di hari pertama kejadian[cite: 19].</li>
+                <li><strong>ExifTool:</strong> Mata-mata Profiling untuk menyusun timeline akurat.</li>
+                <li><strong>Pdfinfo & Pdf-parser:</strong> Pisau bedah anatomi untuk membongkar struktur kode PDF.</li>
+                <li><strong>Strings & Grep:</strong> Penyedot residu teks bahasa manusia di tumpukan kode mesin.</li>
+                <li><strong>Binwalk:</strong> Pendeteksi anomali yang diselundupkan secara paksa.</li>
+                <li><strong>Hashdeep:</strong> Pembuat segel massal (Kriptografi) untuk memverifikasi keaslian data.</li>
             </ul>
-
-            <h2>> Kesimpulan</h2>
-            <p>Memadukan Forensik Digital dan Intelijen Siber mengajarkan kita satu realitas mutlak: Di era digital, menyembunyikan kebohongan dan jejak rekayasa jauh lebih sulit daripada menciptakannya. Pemahaman tentang metodologi dan alat-alat ini bukanlah sekadar panduan untuk penegak hukum, melainkan sebuah edukasi publik. Tujuannya adalah agar masyarakat, pengembang (developer), dan pengguna teknologi di semua kalangan lebih sadar serta menghargai betapa pentingnya arsitektur, keamanan, dan keaslian data di setiap baris kode yang kita konsumsi sehari-hari.</p>
         </div>
 
-        <!-- BOTTOM ADS GATEWAY -->
-        <div class="ads-slot" style="margin-top: 60px;">
-            <!-- PASTE SCRIPT IKLAN ADSTERRA (BANNER) DI BAWAH INI -->
-            <script src="https://pl29342900.profitablecpmratenetwork.com/d3/e5/39/d3e539b7074fbcfc9467c6bf4ed33c8e.js"></script>
+        <div class="ads-slot">
+            <small style="color:rgba(255,0,255,0.4); font-family: 'Orbitron';">>> SECURE_ADS_GATEWAY_02</small>
         </div>
 
         <footer>
-            <p>// SILENTIUM-SHIELD // SECURE RESEARCH DIVISION // ALL RIGHTS RESERVED //</p>
+            <p>// SILENTIUM-SHIELD // RESEARCH DIVISION //</p>
         </footer>
     </div>
 
-    <!-- 3D MATRIX RAIN (DATA FALL) EFFECT -->
     <script>
         const scene = new THREE.Scene();
-        // Fog untuk efek kedalaman / depth of field
-        scene.fog = new THREE.FogExp2(0x050505, 0.05);
-
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // Membuat partikel data yang jatuh seperti Matrix
-        const particleCount = 1200;
+        const isMobile = window.innerWidth < 768;
+        const particleCount = isMobile ? 300 : 800;
         const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-        const velocities = [];
-
-        for (let i = 0; i < particleCount * 3; i += 3) {
-            positions[i] = (Math.random() - 0.5) * 30;     // X
-            positions[i+1] = (Math.random() - 0.5) * 30;   // Y
-            positions[i+2] = (Math.random() - 0.5) * 15 - 5; // Z
-            velocities.push(0.02 + Math.random() * 0.05);  // Kecepatan jatuh
+        const vertices = [];
+        for (let i = 0; i < particleCount; i++) {
+            vertices.push((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 10 - 5);
         }
-
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        
-        // Material hijau neon ala The Matrix
-        const material = new THREE.PointsMaterial({ 
-            color: 0x00ff00, 
-            size: 0.04, 
-            transparent: true, 
-            opacity: 0.6 
-        });
-        
-        const particles = new THREE.Points(geometry, material);
-        scene.add(particles);
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        const material = new THREE.PointsMaterial({ color: 0x00ffff, size: 0.02, transparent: true, opacity: 0.5 });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
 
         camera.position.z = 5;
 
         function animate() {
             requestAnimationFrame(animate);
-            
-            const posAttr = particles.geometry.attributes.position.array;
-            for (let i = 1, j = 0; i < posAttr.length; i += 3, j++) {
-                posAttr[i] -= velocities[j]; // Partikel jatuh ke bawah
-                
-                // Reset posisi partikel ke atas jika sudah terlalu bawah
-                if (posAttr[i] < -15) {
-                    posAttr[i] = 15;
-                }
+            const positions = points.geometry.attributes.position.array;
+            for(let i = 1; i < positions.length; i+=3) {
+                positions[i] -= 0.01; 
+                if(positions[i] < -10) positions[i] = 10;
             }
-            particles.geometry.attributes.position.needsUpdate = true;
-            
-            // Sedikit rotasi agar terasa dinamis
-            particles.rotation.y += 0.001;
-
+            points.geometry.attributes.position.needsUpdate = true;
             renderer.render(scene, camera);
         }
         animate();
