@@ -1,57 +1,20 @@
-# 🛡️ Indrayaza Z, S.E. | Financial & Cybersecurity Specialist
+# 🛡️ SILENTIUM-SHIELD: Digital Intelligence Hub
 
-> "Bridging the gap between Economic Precision and Offensive Security Operations."
+**Terminal ID:** INDRAYAZA-Z
+**Designation:** Technical Strategist, Cyber Analyst & Financial Compliance (S.E.)
+**Status:** ACTIVE_AND_ENCRYPTED
 
-[![Profile View](https://img.shields.io/badge/Profile-Verified-blue?style=for-the-badge&logo=github)](https://github.com/indrayaza-z)
-[![Education](https://img.shields.io/badge/Education-S1%20Ekonomi-green?style=for-the-badge&logo=google-scholar)](https://stimlpi.ac.id)
-[![Cybersecurity](https://img.shields.io/badge/Security-Red%20Team%20Ops-red?style=for-the-badge&logo=kali-linux)](https://tryhackme.com)
+## 👁️ Overview
+Repositori ini adalah infrastruktur inti dari portofolio digital dan publikasi riset independen milik Indrayaza Z. Dibangun dengan arsitektur *Pure Static HTML* tanpa *database* relasional untuk mencegah vektor serangan *SQL Injection*, serta dioptimasi menggunakan **Three.js** dan **GSAP** untuk visualisasi *Cyber-Terrain 3D* berkinerja tinggi.
 
-## 👨‍💻 About Me
-Saya adalah seorang profesional dengan latar belakang unik yang menggabungkan disiplin **Ekonomi/Akuntansi** dengan keahlian teknis **Cybersecurity** dan **Software Development**. Fokus utama saya adalah keamanan data finansial, analisis ancaman siber, dan pengembangan sistem web yang aman.
+## 📂 System Architecture
+- `index.html`: Main Terminal & Certification Matrix.
+- `whitepaper.html`: Classified Intel & Research Publications Reader.
+- `data/`: Local Encrypted Storage (Ignored via .gitignore).
 
-- **📍 Location**: Makassar, Indonesia
-- **🎂 Born**: 10 August 1996
-- **🎓 Alma Mater**: STIM LPI Makassar (S1 Ekonomi)
-- **📧 Contact**: [Email Me]
-
----
-
-## 🔐 Professional Certifications & Competencies
-
-### 🛡️ Cybersecurity & Offensive Ops
-| Certification | Authority/Focus | Status |
-|:--- |:--- |:--- |
-| **CRTOM** | Certified Red Team Operations Management | ✅ Active |
-| **Google Cybersecurity** | Network Security, Python, Linux, SQL | ✅ Active |
-| **Legal of SOC Analyst** | Security Operations Center Legalities | ✅ Active |
-| **CPPS** | Certified Phishing Prevention Specialist | ✅ Active |
-| **CCEP** | Certified Cybersecurity Educator Professional | ✅ Active |
-| **Ethical Hacker** | Fundamental Penetration Testing | ✅ Active |
-| **Customer Data Protection**| Privacy & Compliance | ✅ Active |
-
-### 💰 Finance & Business (S.E. Base)
-| Certification | Focus Area |
-|:--- |:--- |
-| **Brevet A&B** | Advanced Tax Brevet |
-| **Keahlian Akuntansi** | Financial Accounting |
-| **Digital Banking** | Gen Z & Millennial Banking Systems |
-| **IBM Data Analyst** | Data Science & Business Intelligence |
-
-### 💻 Development & Tech Stack
-| Skill | Level |
-|:--- |:--- |
-| **C++ Practitioner (CCPP)** | Backend & Low-level logic |
-| **Web Development** | Junior Web Programmer & Developer |
-| **Digital Marketing** | SEO & SEM Strategy |
-| **CCSC** | Cybersecurity Career Starter |
+## 🚀 Deployment Protocol
+Sistem ini dide-deploy secara otomatis melalui infrastruktur *Edge Network* [Vercel](https://vercel.com) untuk memastikan latensi minimal dan ketersediaan global.
 
 ---
-
-## 🌐 Language Proficiency
-- **Bahasa Indonesia**: Native
-- **English (TOEFL ITP)**: Score 500 (Valid: Aug 2024 - Aug 2026)
-
----
-
-## 📊 GitHub Stats
-![Indrayaza's GitHub stats](https://github-readme-stats.vercel.app/api?username=indrayaza-z&show_icons=true&theme=radical)
+*"Menyembunyikan kebohongan dan jejak rekayasa jauh lebih sulit daripada menciptakannya."* 
+// END_OF_FILE
