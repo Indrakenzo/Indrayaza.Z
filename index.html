@@ -4,395 +4,351 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INDRAYAZA Z | Technical Strategist</title>
+    
+    <!-- Core Libraries: Three.js, GSAP, ScrollTrigger, VanillaTilt -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --neon-pink: #ff00ff;
             --neon-cyan: #00ffff;
             --neon-green: #00ff00;
-            --retro-purple: #300030;
-            --glass: rgba(10, 10, 10, 0.6);
+            --dark-bg: #050505;
+            --glass: rgba(10, 10, 10, 0.4);
         }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body, html {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            background: #050505;
+            background: var(--dark-bg);
             color: var(--neon-cyan);
             font-family: 'Fira Code', monospace;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* CRT Overlay Effect */
-        body::before {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 9999;
-            pointer-events: none;
-            background-size: 100% 2px, 3px 100%;
+        /* Preloader inspired by CODE.AN */
+        .preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 99999; display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+        .preloader__brand { font-family: 'Orbitron'; font-size: 3rem; color: var(--neon-pink); letter-spacing: 10px; margin-bottom: 20px; text-shadow: 0 0 20px var(--neon-pink); }
+        .preloader__bar { width: 300px; height: 2px; background: rgba(0, 255, 255, 0.2); position: relative; overflow: hidden; }
+        .preloader__fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan); }
+        .preloader__meta { margin-top: 15px; color: var(--neon-green); font-size: 0.9rem; letter-spacing: 2px; }
+
+        /* CRT & Canvas */
+        .crt-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 100; pointer-events: none; background-size: 100% 3px, 3px 100%;
+        }
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
+        .wrapper { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        /* Hero Section */
+        header { text-align: center; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        h1.hero-title {
+            font-family: 'Orbitron', sans-serif; font-size: clamp(3rem, 8vw, 6rem);
+            letter-spacing: 15px; margin: 0; color: #fff;
+            text-shadow: 0 0 10px var(--neon-cyan), 0 0 30px var(--neon-pink);
+            opacity: 0; transform: translateY(50px);
+        }
+        .hero-subtitle { font-family: 'Orbitron'; font-size: clamp(1rem, 3vw, 1.5rem); color: var(--neon-pink); letter-spacing: 5px; margin-top: 10px; opacity: 0; }
+        
+        .terminal-container {
+            background: rgba(0, 0, 0, 0.8); border: 1px solid var(--neon-green);
+            padding: 20px; margin-top: 40px; width: 100%; max-width: 600px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1); text-align: left; opacity: 0;
         }
 
-        #bg-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            z-index: -1;
+        /* Discover Grid inspired by CODE.AN */
+        .discover { margin-top: 10vh; padding: 50px 0; }
+        .discover__title { font-family: 'Orbitron'; color: var(--neon-cyan); border-bottom: 1px solid var(--neon-cyan); padding-bottom: 15px; margin-bottom: 40px; font-size: 2rem; }
+        
+        .discover__inner {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 50px 20px;
-            position: relative;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 80px;
-            padding-top: 5vh;
-        }
-
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
-            text-transform: uppercase;
-            letter-spacing: 12px;
-            margin: 0;
-            color: #fff;
-            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-pink), 0 0 40px var(--retro-purple);
-            animation: flicker 3s infinite;
-        }
-
-        .terminal-text {
-            color: var(--neon-green);
-            font-size: 1.1rem;
-            margin-top: 20px;
-            min-height: 30px;
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 1.1rem;
-            background-color: var(--neon-green);
-            animation: blink 1s step-end infinite;
-            vertical-align: text-bottom;
-        }
-
-        /* Core Capabilities Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .card {
+        .discover__item {
             background: var(--glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--neon-cyan);
+            border: 1px solid rgba(0, 255, 255, 0.2);
             border-left: 4px solid var(--neon-pink);
-            padding: 25px;
-            transition: 0.3s;
-            position: relative;
-        }
-
-        .card:hover {
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
-            transform: translateY(-5px);
-        }
-
-        .card h3 {
-            border-bottom: 1px dashed var(--neon-pink);
-            padding-bottom: 10px;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        /* 3D Holographic Certificates Section */
-        .cert-section {
-            margin-top: 80px;
-        }
-
-        .cert-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            justify-content: center;
-            perspective: 1000px; /* Perspective for 3D effect */
-            margin-top: 40px;
-        }
-
-        .cert-card {
-            width: 280px;
-            height: 380px;
-            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05) 0%, rgba(255, 0, 255, 0.05) 100%);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1), inset 0 0 20px rgba(255, 0, 255, 0.1);
             transform-style: preserve-3d;
-            transition: transform 0.1s ease-out, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            border-radius: 4px;
         }
 
-        .cert-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuNSIvPgo8L3N2Zz4=');
-            opacity: 0.3;
-            z-index: 0;
-        }
-
-        .cert-card:hover {
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
-        }
-
-        /* 3D Elements inside the card */
-        .cert-icon {
-            font-size: 4rem;
-            transform: translateZ(60px); /* Pops out in 3D */
-            text-shadow: 0 0 15px var(--neon-cyan);
-            margin-bottom: 20px;
-            z-index: 1;
-        }
-
-        .cert-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            transform: translateZ(40px); /* Pops out slightly less */
-            color: #fff;
-            text-shadow: 0 0 5px var(--neon-pink);
-            z-index: 1;
-        }
-
-        .cert-org {
-            font-size: 0.8rem;
-            transform: translateZ(30px);
-            color: var(--neon-cyan);
-            margin-top: 10px;
-            opacity: 0.8;
-            z-index: 1;
-        }
-
-        .psy-profile {
-            margin-top: 80px;
-            background: rgba(255, 0, 255, 0.05);
+        .discover__tilt {
             padding: 30px;
-            border: 1px dashed var(--neon-pink);
+            transform: translateZ(40px);
+            display: flex; flex-direction: column; justify-content: center;
         }
 
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-            20%, 22%, 24%, 55% { opacity: 0.8; text-shadow: none; }
+        .discover__tilt h3 { font-family: 'Orbitron'; color: #fff; margin-bottom: 15px; font-size: 1.4rem; text-shadow: 0 0 10px var(--neon-pink); }
+        .discover__tilt p { color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6; }
+        .discover__icon { font-size: 3rem; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--neon-cyan)); }
+
+        /* Psychological Profile */
+        .psy-profile {
+            margin-top: 10vh; background: rgba(255, 0, 255, 0.03);
+            padding: 40px; border: 1px dashed var(--neon-pink);
+            position: relative; overflow: hidden;
+        }
+        .psy-profile::before {
+            content: "CLASSIFIED"; position: absolute; top: -20px; right: -20px;
+            font-size: 6rem; font-family: 'Orbitron'; color: rgba(255,0,255,0.05); transform: rotate(10deg);
         }
 
-        @keyframes blink {
-            50% { opacity: 0; }
+        /* Ads Placeholder */
+        .ads-slot {
+            margin: 40px auto; text-align: center; min-height: 90px;
+            border: 1px dashed rgba(0, 255, 255, 0.3); max-width: 728px;
+            display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5);
         }
 
-        footer {
-            text-align: center;
-            margin-top: 80px;
-            font-size: 0.8rem;
-            opacity: 0.5;
-            color: var(--neon-green);
+        /* Infinite Watermark inspired by CODE.AN */
+        .watermark {
+            overflow: hidden; white-space: nowrap; padding: 20px 0;
+            border-top: 1px solid rgba(0, 255, 255, 0.2); border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            margin-top: 10vh; background: rgba(0,0,0,0.8);
         }
+        .watermark__inner {
+            display: inline-block; animation: marquee 20s linear infinite;
+        }
+        .watermark span {
+            font-family: 'Orbitron'; font-size: 2rem; font-weight: 900;
+            color: transparent; -webkit-text-stroke: 1px rgba(0, 255, 255, 0.3);
+            margin-right: 50px;
+        }
+
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
     </style>
 </head>
 <body>
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <h3 class="preloader__brand">SILENTIUM-SHIELD</h3>
+        <div class="preloader__bar"><span class="preloader__fill" id="loader-fill"></span></div>
+        <p class="preloader__meta"><span id="loader-percent">0%</span> <span class="dot">|</span> BOOTING METAGAME LAYER...</p>
+    </div>
 
+    <div class="crt-overlay"></div>
     <canvas id="bg-canvas"></canvas>
 
-    <div class="container">
+    <div class="wrapper">
+        <div class="ads-slot">
+            <small style="color:rgba(0,255,255,0.4); font-family: 'Orbitron';">>> SECURE_ADS_GATEWAY_01</small>
+        </div>
+
         <header>
-            <h1>INDRAYAZA Z</h1>
-            <div style="font-family: 'Orbitron'; font-size: 1.5rem; color: var(--neon-pink); letter-spacing: 5px;">
-                TECHNICAL STRATEGIST
-            </div>
-            <div class="terminal-text">
-                <span id="typing-text"></span><span class="cursor"></span>
+            <h1 class="hero-title">INDRAYAZA Z</h1>
+            <div class="hero-subtitle">TECHNICAL STRATEGIST</div>
+            
+            <div class="terminal-container gs-reveal">
+                <div style="color: var(--neon-green)">$ establishing secure tunnel...</div>
+                <div style="color: var(--neon-cyan)">> Link encrypted. Identity verified.</div>
+                <div style="color: var(--neon-green)">$ <span id="typing"></span><span style="background: var(--neon-green); color: #000; animation: blink 1s step-end infinite;">&nbsp;</span></div>
             </div>
         </header>
 
-        <section id="capabilities">
-            <h2 style="font-family: 'Orbitron'; color: var(--neon-cyan);">> CORE_CAPABILITIES</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>[01] OFFENSIVE OPS</h3>
-                    <p>Penetration Testing & Red Teaming Specialist. Mengidentifikasi dan mengeksploitasi celah keamanan sebelum ancaman nyata terjadi.</p>
-                </div>
-                <div class="card">
-                    <h3>[02] DIGITAL FORENSIC</h3>
-                    <p>Investigasi jejak digital, analisis malware, dan OSINT. Membongkar anomali data untuk melindungi aset kritis.</p>
-                </div>
-                <div class="card">
-                    <h3>[03] FINANCIAL COMPLIANCE</h3>
-                    <p>Integrasi keamanan siber dengan kepatuhan hukum pajak & audit keuangan strategis. Mencegah kebocoran finansial di era digital.</p>
-                </div>
+        <!-- The Metagame Layer (Discover Section) -->
+        <section class="discover" id="discover">
+            <h2 class="discover__title gs-reveal">> CERTIFICATION_MATRIX</h2>
+            <div class="discover__inner">
+                
+                <article class="discover__item js-tilt" data-tilt data-tilt-glare data-tilt-max-glare="0.2">
+                    <div class="discover__tilt">
+                        <div class="discover__icon">⚔️</div>
+                        <h3>Red Team Ops Mgmt</h3>
+                        <p>Offensive Security Specialist. Mengidentifikasi celah dan mengeksekusi penetrasi dengan presisi taktikal kelas militer.</p>
+                    </div>
+                </article>
+
+                <article class="discover__item js-tilt" data-tilt data-tilt-glare data-tilt-max-glare="0.2">
+                    <div class="discover__tilt">
+                        <div class="discover__icon">⚖️</div>
+                        <h3>Brevet Pajak A & B</h3>
+                        <p>Financial Law Compliance. Audit finansial tingkat tinggi dan kepatuhan hukum untuk mencegah kebocoran aset digital.</p>
+                    </div>
+                </article>
+
+                <article class="discover__item js-tilt" data-tilt data-tilt-glare data-tilt-max-glare="0.2">
+                    <div class="discover__tilt">
+                        <div class="discover__icon">🔍</div>
+                        <h3>Digital Forensics</h3>
+                        <p>Investigation & Malware Analysis. Membedah anomali sistem dan mengekstraksi residu data untuk merekonstruksi jejak siber.</p>
+                    </div>
+                </article>
+
             </div>
         </section>
 
-        <section class="cert-section">
-            <h2 style="font-family: 'Orbitron'; color: var(--neon-pink);">> CERTIFICATION_MATRIX</h2>
-            <p>Bukti kualifikasi teknis dan analitis yang divalidasi oleh institusi profesional.</p>
-            
-            <div class="cert-grid">
-                <div class="cert-card">
-                    <div class="cert-icon">⚔️</div>
-                    <div class="cert-title">Certified Red Team Operations Mgmt</div>
-                    <div class="cert-org">// OFFENSIVE SECURITY //</div>
-                </div>
-
-                <div class="cert-card">
-                    <div class="cert-icon">🔍</div>
-                    <div class="cert-title">Digital Forensic & Malware Analysis</div>
-                    <div class="cert-org">// INVESTIGATION & OSINT //</div>
-                </div>
-
-                <div class="cert-card">
-                    <div class="cert-icon">⚖️</div>
-                    <div class="cert-title">Brevet Pajak A & B (S.E.)</div>
-                    <div class="cert-org">// FINANCIAL LAW & COMPLIANCE //</div>
-                </div>
-
-                <div class="cert-card">
-                    <div class="cert-icon">🛡️</div>
-                    <div class="cert-title">Certified Phishing Prevention</div>
-                    <div class="cert-org">// DEFENSIVE SECURITY //</div>
-                </div>
-
-                <div class="cert-card">
-                    <div class="cert-icon">🧠</div>
-                    <div class="cert-title">AI Engineer For Millennials</div>
-                    <div class="cert-org">// ARTIFICIAL INTELLIGENCE //</div>
-                </div>
-
-                <div class="cert-card">
-                    <div class="cert-icon">💻</div>
-                    <div class="cert-title">Certified C++ Practitioner (CCPP)</div>
-                    <div class="cert-org">// SOFTWARE ENGINEERING //</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="psy-profile">
-            <h2 style="font-family: 'Orbitron'; color: var(--neon-cyan);">> OPERATIONAL_PARAMETERS</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 40px; margin-top: 20px;">
+        <!-- Psy-Profile -->
+        <section class="psy-profile gs-reveal">
+            <h2 style="font-family: 'Orbitron'; color: var(--neon-cyan); margin-bottom: 30px;">> OPERATIONAL_PARAMETERS</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
                 <div>
-                    <h3 style="color: var(--neon-pink);">[ MBTI: ENFP-T ]</h3>
-                    <p>The Campaigner. Visioner, adaptif, dan selalu mencari solusi inovatif di luar batas konvensional.</p>
+                    <h3 style="color: var(--neon-pink); margin-bottom: 10px;">[ ENFP-T ]</h3>
+                    <p><strong>The Campaigner:</strong> Visioner, adaptif, dan mampu merangkai taktik serangan maupun pertahanan dari sudut pandang yang tidak terpikirkan oleh sistem konvensional.</p>
                 </div>
                 <div>
-                    <h3 style="color: var(--neon-pink);">[ DISC: COMPLIANCE ]</h3>
-                    <p>Sistematis & berorientasi pada detail. Memastikan akurasi tinggi dalam setiap investigasi dan eksekusi strategi.</p>
+                    <h3 style="color: var(--neon-pink); margin-bottom: 10px;">[ DISC: COMPLIANCE ]</h3>
+                    <p><strong>Systematic & Analytical:</strong> Mengeksekusi setiap audit forensik dan penetrasi jaringan dengan tingkat ketelitian absolut. Mengeliminasi bias melalui data.</p>
                 </div>
             </div>
         </section>
 
-        <footer>
-            <p>// ESTABLISHED 1996 // TERMINAL ID: SILENTIUM-SHIELD // SECURE CONNECTION //</p>
-        </footer>
+        <div class="ads-slot">
+            <small style="color:rgba(255,0,255,0.4); font-family: 'Orbitron';">>> SECURE_ADS_GATEWAY_02</small>
+        </div>
+    </div>
+
+    <!-- Infinite Watermark -->
+    <div class="watermark" aria-hidden="true">
+        <div class="watermark__inner">
+            <span>SILENTIUM-SHIELD</span><span>INDRAYAZA Z</span><span>TECHNICAL STRATEGIST</span><span>OFFENSIVE OPS</span>
+            <span>SILENTIUM-SHIELD</span><span>INDRAYAZA Z</span><span>TECHNICAL STRATEGIST</span><span>OFFENSIVE OPS</span>
+        </div>
     </div>
 
     <script>
-        // 1. Three.js Background Script (Retro 90s Grid)
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        // --- 1. Preloader Logic (Inspired by CODE.AN) ---
+        const preloader = document.getElementById('preloader');
+        const fill = document.getElementById('loader-fill');
+        const percent = document.getElementById('loader-percent');
+        let loadProgress = 0;
 
-        const geometry = new THREE.PlaneGeometry(100, 100, 40, 40);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true, transparent: true, opacity: 0.15 });
-        const grid = new THREE.Mesh(geometry, material);
+        const loaderInterval = setInterval(() => {
+            loadProgress += Math.floor(Math.random() * 10) + 5;
+            if (loadProgress >= 100) {
+                loadProgress = 100;
+                clearInterval(loaderInterval);
+                
+                // Animate Out Preloader
+                gsap.to(preloader, {
+                    yPercent: -100, duration: 1, ease: "power3.inOut", delay: 0.2,
+                    onComplete: initHeroAnimations
+                });
+            }
+            fill.style.width = `${loadProgress}%`;
+            percent.innerText = `${loadProgress}%`;
+        }, 100);
+
+        // --- 2. GSAP Scroll Animations ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        function initHeroAnimations() {
+            const tl = gsap.timeline();
+            tl.to('.hero-title', { opacity: 1, y: 0, duration: 1, ease: "power3.out" })
+              .to('.hero-subtitle', { opacity: 1, duration: 0.8 }, "-=0.5")
+              .to('.terminal-container', { opacity: 1, duration: 0.5 }, "-=0.3");
+
+            // Scroll Reveals
+            gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
+                gsap.fromTo(elem, 
+                    { opacity: 0, y: 50 }, 
+                    { opacity: 1, y: 0, duration: 1, ease: "power2.out",
+                      scrollTrigger: { trigger: elem, start: "top 85%" }
+                    }
+                );
+            });
+        }
+
+        // --- 3. Terminal Typing Effect ---
+        const lines = ["Bypassing mainframe constraints...", "Extracting forensic layers...", "Injecting payload...", "System Override. Welcome, Kenz."];
+        let lineIdx = 0, charIdx = 0;
+        function typeTerminal() {
+            if (charIdx < lines[lineIdx].length) {
+                document.getElementById('typing').textContent += lines[lineIdx][charIdx];
+                charIdx++; setTimeout(typeTerminal, 40);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('typing').textContent = "";
+                    charIdx = 0; lineIdx = (lineIdx + 1) % lines.length;
+                    typeTerminal();
+                }, 3000);
+            }
+        }
+        setTimeout(typeTerminal, 1500); // Start typing after load
+
+        // --- 4. 3D Cyber Terrain (Three.js) ---
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.04);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        const geo = new THREE.PlaneGeometry(120, 120, 40, 40);
+        const mat = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true, transparent: true, opacity: 0.15 });
+        const grid = new THREE.Mesh(geo, mat);
         grid.rotation.x = -Math.PI / 2;
+        grid.position.y = -3;
         scene.add(grid);
 
-        camera.position.y = 2;
-        camera.position.z = 5;
+        // Floating Particles
+        const partGeo = new THREE.BufferGeometry();
+        const partCount = 400;
+        const posArr = new Float32Array(partCount * 3);
+        for(let i=0; i < partCount * 3; i++) {
+            posArr[i] = (Math.random() - 0.5) * 60; 
+            posArr[i+1] = (Math.random() - 0.5) * 20; 
+            posArr[i+2] = (Math.random() - 0.5) * 60; 
+        }
+        partGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+        const partMat = new THREE.PointsMaterial({size: 0.05, color: 0xff00ff});
+        const particles = new THREE.Points(partGeo, partMat);
+        scene.add(particles);
 
-        function animate() {
-            requestAnimationFrame(animate);
-            grid.position.z += 0.02; 
-            if (grid.position.z > 2.5) grid.position.z = 0;
+        camera.position.z = 10;
+        camera.position.y = 1;
+        const clock = new THREE.Clock();
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            const t = clock.getElapsedTime();
+
+            // Animate Terrain Waves
+            const positions = grid.geometry.attributes.position;
+            for(let i = 0; i < positions.count; i++) {
+                const x = positions.getX(i);
+                const y = positions.getY(i);
+                const z = Math.sin(x * 0.2 + t) * Math.cos(y * 0.2 + t) * 0.8;
+                positions.setZ(i, z);
+            }
+            positions.needsUpdate = true;
+
+            // Move grid
+            grid.position.z += 0.03;
+            if (grid.position.z > 3) grid.position.z = 0;
+            particles.rotation.y = t * 0.02;
+
             renderer.render(scene, camera);
         }
+        animate3D();
 
         window.addEventListener('resize', () => {
-            renderer.setSize(window.innerWidth, window.innerHeight);
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        animate();
-
-        // 2. Typing Effect Script
-        const textArray = [
-            "Initializing protocol...", 
-            "Bypassing mainframe...", 
-            "Accessing intelligence records...",
-            "Welcome, Administrator."
-        ];
-        let textIndex = 0;
-        let charIndex = 0;
-        const typingElement = document.getElementById("typing-text");
-
-        function type() {
-            if (charIndex < textArray[textIndex].length) {
-                typingElement.textContent += textArray[textIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(type, 50);
-            } else {
-                setTimeout(erase, 2000);
-            }
-        }
-
-        function erase() {
-            if (charIndex > 0) {
-                typingElement.textContent = textArray[textIndex].substring(0, charIndex - 1);
-                charIndex--;
-                setTimeout(erase, 30);
-            } else {
-                textIndex++;
-                if (textIndex >= textArray.length) textIndex = 0;
-                setTimeout(type, 500);
-            }
-        }
-        
-        setTimeout(type, 1000);
-
-        // 3. 3D Holographic Hover Effect for Certificates
-        const certCards = document.querySelectorAll('.cert-card');
-        
-        certCards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left; // x position within the element
-                const y = e.clientY - rect.top;  // y position within the element
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = ((y - centerY) / centerY) * -15; // Max rotation 15deg
-                const rotateY = ((x - centerX) / centerX) * 15;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-            });
+        // --- 5. VanillaTilt Initialization (Safe for mobile, auto-disables on small screens) ---
+        VanillaTilt.init(document.querySelectorAll(".js-tilt"), {
+            max: 15,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.2,
+            perspective: 1000
         });
     </script>
 </body>
