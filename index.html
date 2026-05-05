@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INDRAYAZA Z | Technical Strategist</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --neon-green: #00ff00;
+            --retro-purple: #300030;
+            --glass: rgba(10, 10, 10, 0.6);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: #050505;
+            color: var(--neon-cyan);
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* CRT Overlay Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9999;
+            pointer-events: none;
+            background-size: 100% 2px, 3px 100%;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            padding-top: 5vh;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            margin: 0;
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-pink), 0 0 40px var(--retro-purple);
+            animation: flicker 3s infinite;
+        }
+
+        .terminal-text {
+            color: var(--neon-green);
+            font-size: 1.1rem;
+            margin-top: 20px;
+            min-height: 30px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.1rem;
+            background-color: var(--neon-green);
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+
+        /* Core Capabilities Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--neon-cyan);
+            border-left: 4px solid var(--neon-pink);
+            padding: 25px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            border-bottom: 1px dashed var(--neon-pink);
+            padding-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* 3D Holographic Certificates Section */
+        .cert-section {
+            margin-top: 80px;
+        }
+
+        .cert-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            perspective: 1000px; /* Perspective for 3D effect */
+            margin-top: 40px;
+        }
+
+        .cert-card {
+            width: 280px;
+            height: 380px;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05) 0%, rgba(255, 0, 255, 0.05) 100%);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1), inset 0 0 20px rgba(255, 0, 255, 0.1);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuNSIvPgo8L3N2Zz4=');
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .cert-card:hover {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
+        }
+
+        /* 3D Elements inside the card */
+        .cert-icon {
+            font-size: 4rem;
+            transform: translateZ(60px); /* Pops out in 3D */
+            text-shadow: 0 0 15px var(--neon-cyan);
+            margin-bottom: 20px;
+            z-index: 1;
+        }
+
+        .cert-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            transform: translateZ(40px); /* Pops out slightly less */
+            color: #fff;
+            text-shadow: 0 0 5px var(--neon-pink);
+            z-index: 1;
+        }
+
+        .cert-org {
+            font-size: 0.8rem;
+            transform: translateZ(30px);
+            color: var(--neon-cyan);
+            margin-top: 10px;
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        .psy-profile {
+            margin-top: 80px;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 30px;
+            border: 1px dashed var(--neon-pink);
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 22%, 24%, 55% { opacity: 0.8; text-shadow: none; }
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            color: var(--neon-green);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="container">
+        <header>
+            <h1>INDRAYAZA Z</h1>
+            <div style="font-family: 'Orbitron'; font-size: 1.5rem; color: var(--neon-pink); letter-spacing: 5px;">
+                TECHNICAL STRATEGIST
+            </div>
+            <div class="terminal-text">
+                <span id="typing-text"></span><span class="cursor"></span>
+            </div>
+        </header>
+
+        <section id="capabilities">
+            <h2 style="font-family: 'Orbitron'; color: var(--neon-cyan);">> CORE_CAPABILITIES</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>[01] OFFENSIVE OPS</h3>
+                    <p>Penetration Testing & Red Teaming Specialist. Mengidentifikasi dan mengeksploitasi celah keamanan sebelum ancaman nyata terjadi.</p>
+                </div>
+                <div class="card">
+                    <h3>[02] DIGITAL FORENSIC</h3>
+                    <p>Investigasi jejak digital, analisis malware, dan OSINT. Membongkar anomali data untuk melindungi aset kritis.</p>
+                </div>
+                <div class="card">
+                    <h3>[03] FINANCIAL COMPLIANCE</h3>
+                    <p>Integrasi keamanan siber dengan kepatuhan hukum pajak & audit keuangan strategis. Mencegah kebocoran finansial di era digital.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cert-section">
+            <h2 style="font-family: 'Orbitron'; color: var(--neon-pink);">> CERTIFICATION_MATRIX</h2>
+            <p>Bukti kualifikasi teknis dan analitis yang divalidasi oleh institusi profesional.</p>
+            
+            <div class="cert-grid">
+                <div class="cert-card">
+                    <div class="cert-icon">⚔️</div>
+                    <div class="cert-title">Certified Red Team Operations Mgmt</div>
+                    <div class="cert-org">// OFFENSIVE SECURITY //</div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon">🔍</div>
+                    <div class="cert-title">Digital Forensic & Malware Analysis</div>
+                    <div class="cert-org">// INVESTIGATION & OSINT //</div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon">⚖️</div>
+                    <div class="cert-title">Brevet Pajak A & B (S.E.)</div>
+                    <div class="cert-org">// FINANCIAL LAW & COMPLIANCE //</div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon">🛡️</div>
+                    <div class="cert-title">Certified Phishing Prevention</div>
+                    <div class="cert-org">// DEFENSIVE SECURITY //</div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon">🧠</div>
+                    <div class="cert-title">AI Engineer For Millennials</div>
+                    <div class="cert-org">// ARTIFICIAL INTELLIGENCE //</div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon">💻</div>
+                    <div class="cert-title">Certified C++ Practitioner (CCPP)</div>
+                    <div class="cert-org">// SOFTWARE ENGINEERING //</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="psy-profile">
+            <h2 style="font-family: 'Orbitron'; color: var(--neon-cyan);">> OPERATIONAL_PARAMETERS</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 40px; margin-top: 20px;">
+                <div>
+                    <h3 style="color: var(--neon-pink);">[ MBTI: ENFP-T ]</h3>
+                    <p>The Campaigner. Visioner, adaptif, dan selalu mencari solusi inovatif di luar batas konvensional.</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--neon-pink);">[ DISC: COMPLIANCE ]</h3>
+                    <p>Sistematis & berorientasi pada detail. Memastikan akurasi tinggi dalam setiap investigasi dan eksekusi strategi.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>// ESTABLISHED 1996 // TERMINAL ID: SILENTIUM-SHIELD // SECURE CONNECTION //</p>
+        </footer>
+    </div>
+
+    <script>
+        // 1. Three.js Background Script (Retro 90s Grid)
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const geometry = new THREE.PlaneGeometry(100, 100, 40, 40);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true, transparent: true, opacity: 0.15 });
+        const grid = new THREE.Mesh(geometry, material);
+        grid.rotation.x = -Math.PI / 2;
+        scene.add(grid);
+
+        camera.position.y = 2;
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            grid.position.z += 0.02; 
+            if (grid.position.z > 2.5) grid.position.z = 0;
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        animate();
+
+        // 2. Typing Effect Script
+        const textArray = [
+            "Initializing protocol...", 
+            "Bypassing mainframe...", 
+            "Accessing intelligence records...",
+            "Welcome, Administrator."
+        ];
+        let textIndex = 0;
+        let charIndex = 0;
+        const typingElement = document.getElementById("typing-text");
+
+        function type() {
+            if (charIndex < textArray[textIndex].length) {
+                typingElement.textContent += textArray[textIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 50);
+            } else {
+                setTimeout(erase, 2000);
+            }
+        }
+
+        function erase() {
+            if (charIndex > 0) {
+                typingElement.textContent = textArray[textIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, 30);
+            } else {
+                textIndex++;
+                if (textIndex >= textArray.length) textIndex = 0;
+                setTimeout(type, 500);
+            }
+        }
+        
+        setTimeout(type, 1000);
+
+        // 3. 3D Holographic Hover Effect for Certificates
+        const certCards = document.querySelectorAll('.cert-card');
+        
+        certCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x position within the element
+                const y = e.clientY - rect.top;  // y position within the element
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -15; // Max rotation 15deg
+                const rotateY = ((x - centerX) / centerX) * 15;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            });
+        });
+    </script>
+</body>
+</html>
