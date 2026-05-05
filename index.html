@@ -2,11 +2,14 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="google-site-verification" content="v17-a_qfeKW8j01MbJpr-1HTFcFb_7lmK5zUaeujG4g" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INDRAYAZA Z | Technical Strategist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- Core Libraries: Three.js, GSAP, ScrollTrigger, VanillaTilt -->
+    <!-- SEO & GOOGLE INDEXING TAGS -->
+    <title>INDRAYAZA Z | Technical Strategist & Cyber Analyst</title>
+    <meta name="description" content="Portofolio resmi Indrayaza Z. Spesialis Offensive Security, Red Team Operations, Digital Forensics, dan Kepatuhan Hukum Finansial (Brevet A&B).">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Core Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -19,133 +22,127 @@
             --neon-cyan: #00ffff;
             --neon-green: #00ff00;
             --dark-bg: #050505;
-            --glass: rgba(10, 10, 10, 0.4);
+            --glass: rgba(10, 10, 10, 0.6);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body, html {
-            background: var(--dark-bg);
-            color: var(--neon-cyan);
-            font-family: 'Fira Code', monospace;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+            background: var(--dark-bg); color: var(--neon-cyan);
+            font-family: 'Fira Code', monospace; overflow-x: hidden; scroll-behavior: smooth;
+            touch-action: pan-y; /* Prevent unwanted mobile zooming */
         }
 
-        /* Preloader inspired by CODE.AN */
+        /* Preloader */
         .preloader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 99999; display: flex;
-            flex-direction: column; align-items: center; justify-content: center;
+            background: #000; z-index: 99999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
-        .preloader__brand { font-family: 'Orbitron'; font-size: 3rem; color: var(--neon-pink); letter-spacing: 10px; margin-bottom: 20px; text-shadow: 0 0 20px var(--neon-pink); }
-        .preloader__bar { width: 300px; height: 2px; background: rgba(0, 255, 255, 0.2); position: relative; overflow: hidden; }
+        .preloader__brand { font-family: 'Orbitron'; font-size: clamp(2rem, 5vw, 3rem); color: var(--neon-pink); letter-spacing: 10px; margin-bottom: 20px; text-shadow: 0 0 20px var(--neon-pink); text-align: center; }
+        .preloader__bar { width: 80%; max-width: 300px; height: 2px; background: rgba(0, 255, 255, 0.2); position: relative; overflow: hidden; }
         .preloader__fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan); }
-        .preloader__meta { margin-top: 15px; color: var(--neon-green); font-size: 0.9rem; letter-spacing: 2px; }
+        .preloader__meta { margin-top: 15px; color: var(--neon-green); font-size: 0.8rem; letter-spacing: 2px; text-align: center; }
 
-        /* CRT & Canvas */
+        /* CRT Overlay */
         .crt-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 100; pointer-events: none; background-size: 100% 3px, 3px 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            z-index: 100; pointer-events: none; background-size: 100% 3px;
         }
         #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
         .wrapper { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-        /* Hero Section */
+        /* Hero */
         header { text-align: center; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         h1.hero-title {
-            font-family: 'Orbitron', sans-serif; font-size: clamp(3rem, 8vw, 6rem);
-            letter-spacing: 15px; margin: 0; color: #fff;
+            font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 8vw, 6rem);
+            letter-spacing: 10px; margin: 0; color: #fff;
             text-shadow: 0 0 10px var(--neon-cyan), 0 0 30px var(--neon-pink);
             opacity: 0; transform: translateY(50px);
         }
-        .hero-subtitle { font-family: 'Orbitron'; font-size: clamp(1rem, 3vw, 1.5rem); color: var(--neon-pink); letter-spacing: 5px; margin-top: 10px; opacity: 0; }
+        .hero-subtitle { font-family: 'Orbitron'; font-size: clamp(0.9rem, 3vw, 1.5rem); color: var(--neon-pink); letter-spacing: 5px; margin-top: 10px; opacity: 0; }
         
         .terminal-container {
             background: rgba(0, 0, 0, 0.8); border: 1px solid var(--neon-green);
-            padding: 20px; margin-top: 40px; width: 100%; max-width: 600px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1); text-align: left; opacity: 0;
+            padding: 15px; margin-top: 30px; width: 100%; max-width: 600px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1); text-align: left; opacity: 0; font-size: 0.9rem;
         }
 
-        /* Discover Grid inspired by CODE.AN */
-        .discover { margin-top: 10vh; padding: 50px 0; }
-        .discover__title { font-family: 'Orbitron'; color: var(--neon-cyan); border-bottom: 1px solid var(--neon-cyan); padding-bottom: 15px; margin-bottom: 40px; font-size: 2rem; }
-        
-        .discover__inner {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
-        }
-
-        .discover__item {
-            background: var(--glass);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-left: 4px solid var(--neon-pink);
-            transform-style: preserve-3d;
-            border-radius: 4px;
-        }
-
-        .discover__tilt {
-            padding: 30px;
-            transform: translateZ(40px);
-            display: flex; flex-direction: column; justify-content: center;
-        }
-
-        .discover__tilt h3 { font-family: 'Orbitron'; color: #fff; margin-bottom: 15px; font-size: 1.4rem; text-shadow: 0 0 10px var(--neon-pink); }
-        .discover__tilt p { color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6; }
-        .discover__icon { font-size: 3rem; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--neon-cyan)); }
-
-        /* Psychological Profile */
-        .psy-profile {
-            margin-top: 10vh; background: rgba(255, 0, 255, 0.03);
-            padding: 40px; border: 1px dashed var(--neon-pink);
-            position: relative; overflow: hidden;
-        }
-        .psy-profile::before {
-            content: "CLASSIFIED"; position: absolute; top: -20px; right: -20px;
-            font-size: 6rem; font-family: 'Orbitron'; color: rgba(255,0,255,0.05); transform: rotate(10deg);
-        }
-
-        /* Ads Placeholder */
+        /* Responsive Adsterra Slot */
         .ads-slot {
             margin: 40px auto; text-align: center; min-height: 90px;
-            border: 1px dashed rgba(0, 255, 255, 0.3); max-width: 728px;
+            border: 1px dashed rgba(0, 255, 255, 0.3); max-width: 100%;
             display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5);
+            overflow: hidden; /* Mencegah layar HP bocor */
         }
 
-        /* Infinite Watermark inspired by CODE.AN */
+        /* Grids & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        .card {
+            background: var(--glass); border: 1px solid rgba(0, 255, 255, 0.2);
+            border-left: 4px solid var(--neon-pink); padding: 25px;
+            backdrop-filter: blur(10px); transition: 0.3s; border-radius: 4px;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2); }
+        .card h3 { font-family: 'Orbitron'; color: #fff; margin-bottom: 15px; font-size: 1.2rem; border-bottom: 1px dashed var(--neon-pink); padding-bottom: 10px; }
+        .card p { color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.6; }
+
+        /* Psy-Profile */
+        .psy-profile {
+            margin-top: 10vh; background: rgba(255, 0, 255, 0.03);
+            padding: 30px; border: 1px dashed var(--neon-pink); position: relative; overflow: hidden;
+        }
+        .psy-profile::before {
+            content: "CLASSIFIED"; position: absolute; top: -10px; right: -10px;
+            font-size: 4rem; font-family: 'Orbitron'; color: rgba(255,0,255,0.05); transform: rotate(10deg);
+        }
+
+        /* Infinite Watermark */
         .watermark {
             overflow: hidden; white-space: nowrap; padding: 20px 0;
             border-top: 1px solid rgba(0, 255, 255, 0.2); border-bottom: 1px solid rgba(0, 255, 255, 0.2);
             margin-top: 10vh; background: rgba(0,0,0,0.8);
         }
-        .watermark__inner {
-            display: inline-block; animation: marquee 20s linear infinite;
-        }
-        .watermark span {
-            font-family: 'Orbitron'; font-size: 2rem; font-weight: 900;
-            color: transparent; -webkit-text-stroke: 1px rgba(0, 255, 255, 0.3);
-            margin-right: 50px;
-        }
-/* Mengunci iklan agar tidak meluber di layar HP */
-.ads-slot {
-    margin: 40px auto; 
-    text-align: center; 
-    min-height: 90px;
-    border: 1px dashed rgba(0, 255, 255, 0.3); 
-    background: rgba(0,0,0,0.5);
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    width: 100%; /* Memastikan lebar responsif */
-    max-width: 100%; /* Menahan banner 728px di layar kecil */
-    overflow: hidden; /* Memotong bagian iklan yang melebihi layar HP */
-}
-
-/* Mematikan fitur zoom paksa saat menekan tombol di HP */
-touch-action: pan-y;
+        .watermark__inner { display: inline-block; animation: marquee 20s linear infinite; }
+        .watermark span { font-family: 'Orbitron'; font-size: 1.5rem; font-weight: 900; color: transparent; -webkit-text-stroke: 1px rgba(0, 255, 255, 0.3); margin-right: 40px; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- HOLOGRAM AI ASSISTANT --- */
+        #hologram-container {
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            display: flex; flex-direction: column; align-items: flex-end;
+            pointer-events: none; /* Let clicks pass through if needed */
+        }
+        .speech-bubble {
+            background: rgba(0, 20, 20, 0.8); border: 1px solid var(--neon-cyan);
+            padding: 10px 15px; border-radius: 8px 8px 0 8px; margin-bottom: 15px;
+            color: var(--neon-cyan); font-size: 0.85rem; max-width: 250px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+            opacity: 0; transform: translateY(20px); transition: 0.5s;
+        }
+        .holo-avatar {
+            width: 60px; height: 60px; position: relative;
+            perspective: 500px; display: flex; justify-content: center; align-items: center;
+        }
+        .holo-core {
+            width: 20px; height: 20px; background: var(--neon-cyan); border-radius: 50%;
+            box-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-pink);
+            animation: pulse 2s infinite;
+        }
+        .holo-ring {
+            position: absolute; width: 100%; height: 100%;
+            border: 2px dashed var(--neon-pink); border-radius: 50%;
+            animation: spin 4s linear infinite;
+        }
+        .holo-ring:nth-child(2) { border-color: var(--neon-cyan); animation: spin-reverse 5s linear infinite; transform: rotateX(60deg); }
+        .holo-ring:nth-child(3) { border-color: var(--neon-green); animation: spin 6s linear infinite; transform: rotateY(60deg); }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } }
+        @keyframes spin { 100% { transform: rotateZ(360deg) rotateX(60deg); } }
+        @keyframes spin-reverse { 100% { transform: rotateZ(-360deg) rotateY(60deg); } }
+        @keyframes blink { 50% { opacity: 0; } }
 
     </style>
 </head>
@@ -154,25 +151,30 @@ touch-action: pan-y;
     <div id="preloader" class="preloader">
         <h3 class="preloader__brand">SILENTIUM-SHIELD</h3>
         <div class="preloader__bar"><span class="preloader__fill" id="loader-fill"></span></div>
-        <p class="preloader__meta"><span id="loader-percent">0%</span> <span class="dot">|</span> BOOTING METAGAME LAYER...</p>
+        <p class="preloader__meta"><span id="loader-percent">0%</span> <span class="dot">|</span> BOOTING SYSTEM...</p>
     </div>
 
+    <!-- Backgrounds -->
     <div class="crt-overlay"></div>
     <canvas id="bg-canvas"></canvas>
 
-    <div class="wrapper">
-        <div class="ads-slot">
-            <script>
-  atOptions = {
-    'key' : 'fa05d8a83ae0ec01519c4252fff76074',
-    'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/fa05d8a83ae0ec01519c4252fff76074/invoke.js"></script>
+    <!-- Hologram Assistant -->
+    <div id="hologram-container">
+        <div class="speech-bubble" id="speech-bubble">
+            <span id="holo-typing"></span><span style="animation: blink 1s infinite;">_</span>
+        </div>
+        <div class="holo-avatar">
+            <div class="holo-ring"></div>
+            <div class="holo-ring"></div>
+            <div class="holo-ring"></div>
+            <div class="holo-core"></div>
+        </div>
+    </div>
 
+    <div class="wrapper">
+        <!-- ADS SLOT 01 -->
+        <div class="ads-slot">
+            <small style="color:rgba(0,255,255,0.4); font-family: 'Orbitron';">>> SECURE_ADS_GATEWAY_01</small>
         </div>
 
         <header>
@@ -186,83 +188,64 @@ touch-action: pan-y;
             </div>
         </header>
 
-        <!-- The Metagame Layer (Discover Section) -->
-        <section class="discover" id="discover">
-            <h2 class="discover__title gs-reveal">> CERTIFICATION_MATRIX</h2>
-            <div class="discover__inner">
-                
-                <article class="discover__item js-tilt" data-tilt data-tilt-glare data-tilt-max-glare="0.2">
-                    <div class="discover__tilt">
-                        <div class="discover__icon">⚔️</div>
-                        <h3>Red Team Ops Mgmt</h3>
-                        <p>Offensive Security Specialist. Mengidentifikasi celah dan mengeksekusi penetrasi dengan presisi taktikal kelas militer.</p>
+        <!-- Classified Publications -->
+        <section style="margin-top: 10vh;" class="gs-reveal">
+            <h2 style="font-family: 'Orbitron'; color: var(--neon-cyan); border-bottom: 1px solid var(--neon-cyan); padding-bottom: 10px;">> CLASSIFIED_PUBLICATIONS</h2>
+            <div class="grid">
+                <a href="whitepaper.html" style="text-decoration: none; color: inherit; display: block;">
+                    <div class="card js-tilt" style="border-left-color: var(--neon-green); cursor: pointer; height: 100%;">
+                        <h3 style="border-bottom-color: var(--neon-green);">[DOC-01] Anatomi Forensik Digital</h3>
+                        <p>Seni membedah jejak siber yang tak terlihat. Membongkar residu biner, TTPs, dan OPSEC Failure.</p>
+                        <div style="margin-top: 15px; color: var(--neon-green); font-size: 0.85rem; font-weight: bold; animation: blink 2s infinite;">>> READ_FILE</div>
                     </div>
-                </article>
-
-                <article class="discover__item js-tilt" data-tilt data-tilt-glare data-tilt-max-glare="0.2">
-                    <div class="discover__tilt">
-                        <div class="discover__icon">⚖️</div>
-                        <h3>Brevet Pajak A & B</h3>
-                        <p>Financial Law Compliance. Audit finansial tingkat tinggi dan kepatuhan hukum untuk mencegah kebocoran aset digital.</p>
+                </a>
+                <a href="#" style="text-decoration: none; color: inherit; display: block;">
+                    <div class="card js-tilt" style="border-left-color: var(--neon-pink); cursor: pointer; height: 100%;">
+                        <h3 style="border-bottom-color: var(--neon-pink);">[OPN-01] Pertahanan Pajak Digital</h3>
+                        <p>Analisis kepatuhan finansial di era transaksi siber tanpa batas. (Segera Rilis)</p>
+                        <div style="margin-top: 15px; color: var(--neon-pink); font-size: 0.85rem; font-weight: bold;">>> AWAITING_DECRYPTION</div>
                     </div>
-                </article>
+                </a>
+            </div>
+        </section>
 
-                <article class="discover__item js-tilt" data-tilt data-tilt-glare data-tilt-max-glare="0.2">
-                    <div class="discover__tilt">
-                        <div class="discover__icon">🔍</div>
-                        <h3>Digital Forensics</h3>
-                        <p>Investigation & Malware Analysis. Membedah anomali sistem dan mengekstraksi residu data untuk merekonstruksi jejak siber.</p>
-                    </div>
-                </article>
-
+        <!-- Core Capabilities -->
+        <section style="margin-top: 10vh;" class="gs-reveal">
+            <h2 style="font-family: 'Orbitron'; color: var(--neon-pink); border-bottom: 1px solid var(--neon-pink); padding-bottom: 10px;">> CERTIFICATION_MATRIX</h2>
+            <div class="grid">
+                <div class="card js-tilt">
+                    <h3>⚔️ Red Team Ops</h3>
+                    <p>Offensive Security Specialist. Identifikasi celah dan eksekusi penetrasi dengan presisi taktikal.</p>
+                </div>
+                <div class="card js-tilt">
+                    <h3>⚖️ Brevet Pajak A & B</h3>
+                    <p>Financial Law Compliance. Audit finansial tingkat tinggi dan kepatuhan hukum perpajakan.</p>
+                </div>
+                <div class="card js-tilt">
+                    <h3>🔍 Digital Forensics</h3>
+                    <p>Malware Analysis & OSINT. Membedah anomali sistem dan mengekstraksi residu data.</p>
+                </div>
             </div>
         </section>
 
         <!-- Psy-Profile -->
         <section class="psy-profile gs-reveal">
-            <h2 style="font-family: 'Orbitron'; color: var(--neon-cyan); margin-bottom: 30px;">> OPERATIONAL_PARAMETERS</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <h2 style="font-family: 'Orbitron'; color: var(--neon-cyan); margin-bottom: 20px;">> OPERATIONAL_PARAMETERS</h2>
+            <div class="grid" style="margin-top: 0;">
                 <div>
-                    <h3 style="color: var(--neon-pink); margin-bottom: 10px;">[ ENFP-T ]</h3>
-                    <p><strong>The Campaigner:</strong> Visioner, adaptif, dan mampu merangkai taktik serangan maupun pertahanan dari sudut pandang yang tidak terpikirkan oleh sistem konvensional.</p>
+                    <h3 style="color: var(--neon-pink); margin-bottom: 10px; font-family: 'Orbitron';">[ ENFP-T ]</h3>
+                    <p style="font-size: 0.9rem; color: #ccc;">The Campaigner: Visioner, adaptif, merangkai taktik serangan & pertahanan di luar batas konvensional.</p>
                 </div>
                 <div>
-                    <h3 style="color: var(--neon-pink); margin-bottom: 10px;">[ DISC: COMPLIANCE ]</h3>
-                    <p><strong>Systematic & Analytical:</strong> Mengeksekusi setiap audit forensik dan penetrasi jaringan dengan tingkat ketelitian absolut. Mengeliminasi bias melalui data.</p>
+                    <h3 style="color: var(--neon-pink); margin-bottom: 10px; font-family: 'Orbitron';">[ DISC: COMPLIANCE ]</h3>
+                    <p style="font-size: 0.9rem; color: #ccc;">Systematic & Analytical: Eksekusi audit forensik dengan tingkat ketelitian absolut. Eliminasi bias melalui data.</p>
                 </div>
             </div>
         </section>
-        <!-- CLASSIFIED PUBLICATIONS (RUANG ARTIKEL & OPINI) -->
-        <section style="margin-top: 60px; margin-bottom: 40px;">
-            <h2 style="font-family: 'Orbitron'; color: var(--neon-cyan); border-bottom: 1px solid var(--neon-cyan); padding-bottom: 10px;">> CLASSIFIED_PUBLICATIONS</h2>
-            <div class="grid">
-                
-                <!-- Kartu Artikel 1 (Arahkan ke file whitepaper.html) -->
-                <a href="whitepaper.html" style="text-decoration: none; color: inherit; display: block;">
-                    <div class="card" style="border-left-color: var(--neon-green); cursor: pointer; height: 100%;">
-                        <h3 style="border-bottom-color: var(--neon-green); font-size: 1.1rem;">[DOC-01] Anatomi Forensik Digital</h3>
-                        <p style="font-size: 0.9rem; margin-top: 10px;">Seni membedah jejak siber yang tak terlihat. Membongkar residu biner, TTPs, dan OPSEC Failure.</p>
-                        <div style="margin-top: 15px; color: var(--neon-green); font-size: 0.85rem; font-weight: bold; animation: blink 2s infinite;">>> READ_FILE</div>
-                    </div>
-                </a>
-                
-                <!-- Kartu Opini (Arahkan ke file opini-keuangan.html nanti) -->
-                <a href="#" style="text-decoration: none; color: inherit; display: block;">
-                    <div class="card" style="border-left-color: var(--neon-pink); cursor: pointer; height: 100%;">
-                        <h3 style="border-bottom-color: var(--neon-pink); font-size: 1.1rem;">[OPN-01] Strategi Pertahanan Pajak Digital</h3>
-                        <p style="font-size: 0.9rem; margin-top: 10px;">Analisis kepatuhan finansial di era transaksi siber tanpa batas. (Segera Rilis)</p>
-                        <div style="margin-top: 15px; color: var(--neon-pink); font-size: 0.85rem; font-weight: bold;">>> AWAITING_DECRYPTION</div>
-                    </div>
-                </a>
 
-            </div>
-        </section>
-        <!-- END CLASSIFIED PUBLICATIONS -->
-
+        <!-- ADS SLOT 02 -->
         <div class="ads-slot">
-            <script async="async" data-cfasync="false" src="https://pl29342898.profitablecpmratenetwork.com/3497ec8e05563594e7e403652c809ac5/invoke.js"></script>
-<div id="container-3497ec8e05563594e7e403652c809ac5"></div>
-
+            <small style="color:rgba(255,0,255,0.4); font-family: 'Orbitron';">>> SECURE_ADS_GATEWAY_02</small>
         </div>
     </div>
 
@@ -275,50 +258,54 @@ touch-action: pan-y;
     </div>
 
     <script>
-        // --- 1. Preloader Logic (Inspired by CODE.AN) ---
+        // --- 1. Preloader Logic ---
         const preloader = document.getElementById('preloader');
         const fill = document.getElementById('loader-fill');
         const percent = document.getElementById('loader-percent');
         let loadProgress = 0;
 
         const loaderInterval = setInterval(() => {
-            loadProgress += Math.floor(Math.random() * 10) + 5;
+            loadProgress += Math.floor(Math.random() * 15) + 5;
             if (loadProgress >= 100) {
                 loadProgress = 100;
                 clearInterval(loaderInterval);
-                
-                // Animate Out Preloader
-                gsap.to(preloader, {
-                    yPercent: -100, duration: 1, ease: "power3.inOut", delay: 0.2,
-                    onComplete: initHeroAnimations
-                });
+                gsap.to(preloader, { yPercent: -100, duration: 1, ease: "power3.inOut", delay: 0.2, onComplete: initHeroAnimations });
             }
             fill.style.width = `${loadProgress}%`;
             percent.innerText = `${loadProgress}%`;
         }, 100);
 
-        // --- 2. GSAP Scroll Animations ---
+        // --- 2. GSAP Animations & Hologram ---
         gsap.registerPlugin(ScrollTrigger);
 
         function initHeroAnimations() {
             const tl = gsap.timeline();
             tl.to('.hero-title', { opacity: 1, y: 0, duration: 1, ease: "power3.out" })
               .to('.hero-subtitle', { opacity: 1, duration: 0.8 }, "-=0.5")
-              .to('.terminal-container', { opacity: 1, duration: 0.5 }, "-=0.3");
+              .to('.terminal-container', { opacity: 1, duration: 0.5 }, "-=0.3")
+              .to('.speech-bubble', { opacity: 1, y: 0, duration: 0.5, onComplete: typeHolo }, "+=0.5");
 
-            // Scroll Reveals
             gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
-                gsap.fromTo(elem, 
-                    { opacity: 0, y: 50 }, 
-                    { opacity: 1, y: 0, duration: 1, ease: "power2.out",
-                      scrollTrigger: { trigger: elem, start: "top 85%" }
-                    }
-                );
+                gsap.fromTo(elem, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out", scrollTrigger: { trigger: elem, start: "top 85%" }});
             });
+            setTimeout(typeTerminal, 1000);
         }
 
-        // --- 3. Terminal Typing Effect ---
-        const lines = ["Bypassing mainframe constraints...", "Extracting forensic layers...", "Injecting payload...", "System Override. Welcome, Kenz."];
+        // --- 3. Hologram Typing ---
+        const holoText = "Halo, selamat datang di portofolio Indrayaza Z. Saya Kenz, asisten intelijen Anda.";
+        let holoIdx = 0;
+        function typeHolo() {
+            if (holoIdx < holoText.length) {
+                document.getElementById('holo-typing').textContent += holoText[holoIdx];
+                holoIdx++; setTimeout(typeHolo, 50);
+            } else {
+                // Sembunyikan bubble setelah 6 detik agar tidak menutupi layar HP terus-menerus
+                setTimeout(() => { gsap.to('.speech-bubble', {opacity: 0, y: 20, duration: 0.5}); }, 6000);
+            }
+        }
+
+        // --- 4. Terminal Typing ---
+        const lines = ["Bypassing mainframe constraints...", "Extracting forensic layers...", "System Override. Welcome, Kenz."];
         let lineIdx = 0, charIdx = 0;
         function typeTerminal() {
             if (charIdx < lines[lineIdx].length) {
@@ -332,61 +319,50 @@ touch-action: pan-y;
                 }, 3000);
             }
         }
-        setTimeout(typeTerminal, 1500); // Start typing after load
 
-        // --- 4. 3D Cyber Terrain (Three.js) ---
+        // --- 5. SMART 3D Terrain (Three.js) ---
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x000000, 0.04);
+        scene.fog = new THREE.FogExp2(0x050505, 0.04);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
 
-        const geo = new THREE.PlaneGeometry(120, 120, 40, 40);
+        const geo = new THREE.PlaneGeometry(120, 120, 30, 30);
         const mat = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true, transparent: true, opacity: 0.15 });
         const grid = new THREE.Mesh(geo, mat);
-        grid.rotation.x = -Math.PI / 2;
-        grid.position.y = -3;
+        grid.rotation.x = -Math.PI / 2; grid.position.y = -3;
         scene.add(grid);
 
-        // Floating Particles
+        // Smart Particle System for Mobile
+        const isMobile = window.innerWidth < 768;
+        const particleCount = isMobile ? 300 : 1000;
         const partGeo = new THREE.BufferGeometry();
-        const partCount = 400;
-        const posArr = new Float32Array(partCount * 3);
-        for(let i=0; i < partCount * 3; i++) {
-            posArr[i] = (Math.random() - 0.5) * 60; 
+        const posArr = new Float32Array(particleCount * 3);
+        for(let i=0; i < particleCount * 3; i++) {
+            posArr[i] = (Math.random() - 0.5) * (isMobile ? 30 : 60); 
             posArr[i+1] = (Math.random() - 0.5) * 20; 
-            posArr[i+2] = (Math.random() - 0.5) * 60; 
+            posArr[i+2] = (Math.random() - 0.5) * (isMobile ? 30 : 60); 
         }
         partGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
-        const partMat = new THREE.PointsMaterial({size: 0.05, color: 0xff00ff});
+        const partMat = new THREE.PointsMaterial({size: isMobile ? 0.08 : 0.05, color: 0xff00ff});
         const particles = new THREE.Points(partGeo, partMat);
         scene.add(particles);
 
-        camera.position.z = 10;
-        camera.position.y = 1;
+        camera.position.z = 10; camera.position.y = 1;
         const clock = new THREE.Clock();
 
         function animate3D() {
             requestAnimationFrame(animate3D);
             const t = clock.getElapsedTime();
-
-            // Animate Terrain Waves
             const positions = grid.geometry.attributes.position;
             for(let i = 0; i < positions.count; i++) {
-                const x = positions.getX(i);
-                const y = positions.getY(i);
-                const z = Math.sin(x * 0.2 + t) * Math.cos(y * 0.2 + t) * 0.8;
-                positions.setZ(i, z);
+                const x = positions.getX(i), y = positions.getY(i);
+                positions.setZ(i, Math.sin(x * 0.2 + t) * Math.cos(y * 0.2 + t) * 0.8);
             }
             positions.needsUpdate = true;
-
-            // Move grid
-            grid.position.z += 0.03;
-            if (grid.position.z > 3) grid.position.z = 0;
+            grid.position.z += 0.03; if (grid.position.z > 3) grid.position.z = 0;
             particles.rotation.y = t * 0.02;
-
             renderer.render(scene, camera);
         }
         animate3D();
@@ -397,14 +373,10 @@ touch-action: pan-y;
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- 5. VanillaTilt Initialization (Safe for mobile, auto-disables on small screens) ---
-        VanillaTilt.init(document.querySelectorAll(".js-tilt"), {
-            max: 15,
-            speed: 400,
-            glare: true,
-            "max-glare": 0.2,
-            perspective: 1000
-        });
+        // --- 6. VanillaTilt (Auto disabled on mobile by the library config) ---
+        if(!isMobile) {
+            VanillaTilt.init(document.querySelectorAll(".js-tilt"), { max: 10, speed: 400, glare: true, "max-glare": 0.1 });
+        }
     </script>
 </body>
 </html>
